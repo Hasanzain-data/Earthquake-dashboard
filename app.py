@@ -7,6 +7,7 @@ st.title('Global Earthquake Dashboard')
 st.write('Interactive dashboard analysing USGS Magnitude 2.5+ Earthquakes')
 st.subheader('Total Earthquakes: ' + str(len(filtered_df)))
 st.sidebar.header('Filters')
+st.sidebar.write('Use the filters below to explore the data.')
 
 mag_min = st.sidebar.slider('Minimum Magnitude', 
     min_value=float(df['mag'].min()), 
