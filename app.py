@@ -5,7 +5,7 @@ df = pd.read_csv('2.5_week.csv')
 
 st.title('Global Earthquake Dashboard')
 st.write('Interactive dashboard analysing USGS Magnitude 2.5+ Earthquakes')
-st.subheader('Total Earthquakes: ' + str(len(filtered_df)))
+st.subheader('Global Earthquake Analysis')
 st.sidebar.header('Filters')
 st.sidebar.write('Use the filters below to explore the data.')
 
