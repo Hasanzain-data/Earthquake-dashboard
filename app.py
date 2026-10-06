@@ -1,7 +1,18 @@
 import streamlit as st
 import pandas as pd
+from pathlib import Path
 
-df = pd.read_csv('2.5_week.csv')
+DATA_FILE = Path(__file__).parent / '2.5_week.csv'
+
+
+@st.cache_data
+def load_data():
+    df = pd.read_csv(DATA_FILE)
+    df['time'] = pd.to_datetime(df['time'])
+    return df
+
+
+df = load_data()
 
 st.title('Global Earthquake Dashboard')
 st.write('Interactive dashboard analysing USGS Magnitude 2.5+ Earthquakes')
@@ -23,7 +34,9 @@ filtered_df = df[(df['mag'] >= mag_min) & (df['depth'] <= depth_max)]
 
 st.header('Magnitude Distribution')
 st.write('This chart shows the distribution of earthquake magnitudes.')
-mag_counts = filtered_df['mag'].value_counts().sort_index()
+mag_bins = (filtered_df['mag'] // 0.5) * 0.5
+mag_counts = mag_bins.value_counts().sort_index()
+mag_counts.index = [f'{m:.1f}-{m + 0.5:.1f}' for m in mag_counts.index]
 st.bar_chart(mag_counts)
 
 st.header('Earthquake Map')
@@ -34,7 +47,7 @@ st.map(map_df)
 
 st.header('Depth Analysis')
 st.write('This chart shows earthquake depth over time.')
-depth_df = filtered_df[['depth']].reset_index(drop=True)
+depth_df = filtered_df[['time', 'depth']].sort_values('time').set_index('time')
 st.line_chart(depth_df)
 
 st.header('Earthquake Data Table')
